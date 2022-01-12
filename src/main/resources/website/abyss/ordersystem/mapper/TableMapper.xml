@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="website.abyss.ordersystem.mapper.TableMapper">
+  <resultMap id="BaseResultMap" type="website.abyss.ordersystem.entities.Table">
+    <constructor>
+      <arg column="table_id" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="table_state" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="full_people" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="table_price" javaType="java.lang.Double" jdbcType="DOUBLE" />
+    </constructor>
+  </resultMap>
+  <select id="findFreeTableList" resultType="website.abyss.ordersystem.entities.Table">
+    select * from `table` where table_state = 0
+  </select>
+  <select id="findTableList" resultType="website.abyss.ordersystem.entities.Table">
+    select * from `table`
+  </select>
+  <select id="getByTableId" parameterType="java.lang.String" resultType="website.abyss.ordersystem.entities.Table">
+    select * from `table` where table_id like #{tableId}
+  </select>
+  <insert id="addTable" parameterType="website.abyss.ordersystem.entities.Table">
+    insert into `table` (table_id,full_people,table_price) values (#{tableId},#{fullPeople},#{tablePrice})
+  </insert>
+  <delete id="deleteTable" parameterType="website.abyss.ordersystem.entities.Table">
+    delete from `table` where table_id like #{tableId}
+  </delete>
+  <update id="changeTable" parameterType="website.abyss.ordersystem.entities.Table">
+    update `table` set table_price=#{tablePrice},full_people=#{fullPeople} where table_id like #{tableId}
+  </update>
+</mapper>

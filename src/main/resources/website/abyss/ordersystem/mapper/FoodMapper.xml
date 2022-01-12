@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="website.abyss.ordersystem.mapper.FoodMapper">
+  <resultMap id="BaseResultMap" type="website.abyss.ordersystem.entities.Food">
+    <constructor>
+      <arg column="food_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="food_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="food_price" javaType="java.lang.Double" jdbcType="DECIMAL" />
+      <arg column="food_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="food_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="food_repertory" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="category_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <select id="getByFoodName" parameterType="java.lang.String" resultType="website.abyss.ordersystem.entities.Food">
+    select * from food where food_name like #{foodName}
+  </select>
+  <insert id="addFood" parameterType="website.abyss.ordersystem.entities.Food">
+    insert into food (food_name,food_price,food_desc,food_photo,food_repertory,category_id) values (#{foodName},#{foodPrice},#{foodDesc},#{foodPhoto},#{foodRepertory},#{categoryId})
+  </insert>
+  <delete id="deleteFood" parameterType="website.abyss.ordersystem.entities.Food">
+    delete from food where food_id = #{foodId}
+  </delete>
+  <update id="addRepertory" parameterType="website.abyss.ordersystem.entities.Food">
+    update food set food_repertory = #{foodRepertory} where food_id = #{foodId}
+  </update>
+  <update id="changeFood" parameterType="website.abyss.ordersystem.entities.Food">
+    update food set food_name = #{foodName},food_price =#{foodPrice},food_desc = #{foodDesc},food_photo = #{foodPhoto},category_id = #{categoryId} where food_id = #{foodId}
+  </update>
+  <select id="foodList" resultType="website.abyss.ordersystem.entities.Food">
+    select * from food
+  </select>
+  <select id="findFoodList" parameterType="java.lang.String" resultType="website.abyss.ordersystem.entities.Food">
+    select * from food where food_name like concat('%',#{foodName},'%')
+  </select>
+  <select id="findFoodListByCategory" parameterType="java.lang.String" resultType="website.abyss.ordersystem.entities.Food">
+    select food.* from food,category where food.category_id = category.category_id and category.category_name like #{categoryName}
+  </select>
+</mapper>

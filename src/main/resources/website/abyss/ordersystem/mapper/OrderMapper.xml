@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="website.abyss.ordersystem.mapper.OrderMapper">
+  <resultMap id="OrderMap" type="website.abyss.ordersystem.entities.Order">
+    <constructor>
+      <arg column="order_id" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="cust_phone" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="table_id" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="order_state" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="order_price" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="end_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <insert id="takeOrder" parameterType="website.abyss.ordersystem.entities.Order">
+    insert into `order` (order_id,cust_phone,table_id,create_time) values (#{orderId},#{custPhone},#{tableId},#{createTime})
+  </insert>
+  <update id="payOrder" parameterType="website.abyss.ordersystem.entities.Order">
+    update `order` set order_state=1,order_price = #{orderPrice},end_time = #{endTime} where order_id = #{orderId}
+  </update>
+  <update id="freeTable" parameterType="java.lang.String">
+    update `table` set table_state = 0 where table_id like #{tableId}
+  </update>
+  <update id="pay" parameterType="website.abyss.ordersystem.entities.Order">
+    update customer as a,`order` as b set a.cust_balance = a.cust_balance - #{orderPrice} where a.cust_phone = #{custPhone}
+  </update>
+  <update id="useTable" parameterType="java.lang.String">
+    update `table` set table_state = 1 where table_id like #{tableId}
+  </update>
+  <select id="isTableFree" parameterType="java.lang.String" resultType="website.abyss.ordersystem.entities.Table">
+    select * from `table` where table_state = 0 and table_id like #{tableId}
+  </select>
+  <select id="isCustFree" parameterType="java.lang.String" resultType="website.abyss.ordersystem.entities.Order">
+    select * from `order` where cust_phone = #{custPhone} and order_state = 0
+  </select>
+  <select id="isOrderPay" parameterType="java.lang.String" resultType="website.abyss.ordersystem.entities.Order">
+    select * from `order` where order_id like #{orderId} and order_state = 0
+  </select>
+  <select id="checkout" parameterType="website.abyss.ordersystem.entities.Order" resultType="java.lang.Double">
+    select sum(a.food_price * b.food_num) from food as a, record as b where a.food_id = b.food_id and b.order_id like #{orderId}
+  </select>
+  <select id="orderFoodList" parameterType="website.abyss.ordersystem.entities.Order" resultType="website.abyss.ordersystem.entities.OrderFood">
+    select b.*,a.food_num from record as a,food as b where a.order_id =#{orderId} and a.food_id = b.food_id
+  </select>
+  <select id="tablePrice" parameterType="java.lang.String" resultType="java.lang.Double">
+    select table_price from `table` where table_id like #{tableId}
+  </select>
+
+</mapper>

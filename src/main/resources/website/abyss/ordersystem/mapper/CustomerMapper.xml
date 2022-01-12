@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="website.abyss.ordersystem.mapper.CustomerMapper">
+  <resultMap id="BaseResultMap" type="website.abyss.ordersystem.entities.Customer">
+    <constructor>
+      <arg column="cust_phone" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="cust_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cust_balance" javaType="java.lang.Double" jdbcType="DOUBLE" />
+    </constructor>
+  </resultMap>
+  <select id="getByCustPhone" parameterType="java.lang.String" resultType="website.abyss.ordersystem.entities.Customer">
+    select * from customer where cust_phone = #{custPhone}
+  </select>
+  <select id="myOrderList" parameterType="java.lang.String" resultType="website.abyss.ordersystem.entities.Order">
+    select * from `order` where cust_phone = #{custPhone}
+  </select>
+  <select id="myReserveList" parameterType="java.lang.String" resultType="website.abyss.ordersystem.entities.Reserve">
+    select * from reserve where cust_phone = #{custPhone}
+  </select>
+  <insert id="register" parameterType="website.abyss.ordersystem.entities.Customer">
+    insert into customer (cust_phone,cust_name,password) values (#{custPhone},#{custName},#{password})
+  </insert>
+  <update id="update" parameterType="website.abyss.ordersystem.entities.Customer">
+    update customer set password = #{password} where cust_phone = #{custPhone}
+  </update>
+  <update id="recharge" parameterType="website.abyss.ordersystem.entities.Customer">
+    update customer set cust_balance = #{custBalance} where cust_phone = #{custPhone}
+  </update>
+  <update id="changeName" parameterType="website.abyss.ordersystem.entities.Customer">
+    update customer set cust_name = #{custName} where cust_phone = #{custPhone}
+  </update>
+</mapper>

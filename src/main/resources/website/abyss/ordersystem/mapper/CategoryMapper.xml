@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="website.abyss.ordersystem.mapper.CategoryMapper">
+  <resultMap id="BaseResultMap" type="website.abyss.ordersystem.entities.Category">
+    <constructor>
+      <arg column="category_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="category_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <select id="getByCategoryName" parameterType="java.lang.String" resultType="website.abyss.ordersystem.entities.Category">
+    select * from category where category_name like #{categoryName}
+  </select>
+  <select id="categoryList" resultType="website.abyss.ordersystem.entities.Category">
+    select * from category
+  </select>
+  <update id="changeCategory" parameterType="website.abyss.ordersystem.entities.Category">
+    update category set category_name = #{categoryName} where category_id = #{categoryId}
+  </update>
+  <delete id="deleteCategory" parameterType="website.abyss.ordersystem.entities.Category">
+    delete from category where category_id = #{categoryId}
+  </delete>
+  <insert id="addCategory" parameterType="website.abyss.ordersystem.entities.Category">
+    insert into category (category_id,category_name) values (#{categoryId},#{categoryName})
+  </insert>
+</mapper>

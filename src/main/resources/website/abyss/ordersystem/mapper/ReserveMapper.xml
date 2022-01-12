@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="website.abyss.ordersystem.mapper.ReserveMapper">
+  <resultMap id="BaseResultMap" type="website.abyss.ordersystem.entities.Reserve">
+    <constructor>
+      <arg column="reserve_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="cust_phone" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="table_id" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="start_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="end_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <insert id="addReserve" parameterType="website.abyss.ordersystem.entities.Reserve">
+    insert into reserve (cust_phone,table_id,start_time,end_time) values (#{custPhone},#{tableId},#{startTime},#{endTime})
+  </insert>
+  <update id="changeReserve" parameterType="website.abyss.ordersystem.entities.Reserve">
+    update reserve set table_id like #{tableId},start_time=#{startTime},end_time=#{endTime} where reserve_id=#{reserveId}
+  </update>
+  <delete id="deleteReserve" parameterType="website.abyss.ordersystem.entities.Reserve">
+    delete from reserve where reserve_id = #{reserveId}
+  </delete>
+  <select id="verifyReserve" parameterType="website.abyss.ordersystem.entities.Reserve" resultType="website.abyss.ordersystem.entities.Reserve">
+    select * from reserve as A where A.reserve_id not in
+                                     (select B.reserve_id from reserve as B where B.start_time <![CDATA[ >= ]]> #{endTime} or B.end_time <![CDATA[ <= ]]> #{startTime})
+                                 and A.table_id like #{tableId}
+  </select>
+  <select id="getByReserveId" resultType="website.abyss.ordersystem.entities.Reserve">
+    select * from reserve where reserve_id = #{reserveId}
+  </select>
+  <select id="findReserveByTable" parameterType="java.lang.String" resultType="website.abyss.ordersystem.entities.Reserve">
+    select * from reserve where table_id like #{tableId}
+  </select>
+</mapper>

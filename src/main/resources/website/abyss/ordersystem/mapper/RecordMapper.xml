@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="website.abyss.ordersystem.mapper.RecordMapper">
+  <resultMap id="BaseResultMap" type="website.abyss.ordersystem.entities.Record">
+    <constructor>
+      <arg column="record_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="order_id" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="food_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="food_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <insert id="insertRecord" parameterType="website.abyss.ordersystem.entities.Record">
+    insert into record (order_id,food_id,food_num) values (#{orderId},#{foodId},#{foodNum})
+  </insert>
+  <update id="updateRecord" parameterType="website.abyss.ordersystem.entities.Record">
+    update record set food_num = #{foodNum} where order_id = #{orderId} and food_id = #{foodId}
+  </update>
+  <delete id="deleteRecord" parameterType="website.abyss.ordersystem.entities.Record">
+    delete from record where order_id = #{orderId} and food_id = #{foodId}
+  </delete>
+  <select id="getByRecord" parameterType="website.abyss.ordersystem.entities.Record" resultType="website.abyss.ordersystem.entities.Record">
+    select * from record where order_id = #{orderId} and food_id = #{foodId}
+  </select>
+</mapper>
